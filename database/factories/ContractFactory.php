@@ -16,7 +16,7 @@ class ContractFactory extends Factory
         return [
             'user_id' => User::factory(),
             'customer_id' => Customer::factory(),
-            'code' => 'CTR-' . fake()->numerify('#####'),
+            'code' => 'CTR-'.fake()->numerify('#####'),
             'description' => fake()->sentence(4),
             'amount' => fake()->randomFloat(2, 100, 50000),
             'interest_rate' => fake()->randomFloat(2, 0, 5),

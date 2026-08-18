@@ -5,10 +5,8 @@ namespace App\Services;
 use App\Models\Contract;
 use App\Models\Customer;
 use App\Models\Installment;
-use App\Models\Payment;
-use App\Models\SalaryRecord;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class DashboardMetricsService
 {
@@ -20,7 +18,7 @@ class DashboardMetricsService
         $totalCustomers = Customer::where('user_id', $userId)->count();
         $totalContracts = Contract::where('user_id', $userId)->where('status', 'active')->count();
 
-        $installments = Installment::whereHas('contract', fn($q) => $q->where('user_id', $userId));
+        $installments = Installment::whereHas('contract', fn ($q) => $q->where('user_id', $userId));
 
         $toReceive = (clone $installments)->where('status', 'pending')->where('due_date', '>', $today)->sum('amount_due');
         $overdue = (clone $installments)->where('status', 'overdue')->sum('amount_due');
@@ -38,9 +36,9 @@ class DashboardMetricsService
         );
     }
 
-    public function getRecentInstallments(int $userId, int $limit = 10): \Illuminate\Support\Collection
+    public function getRecentInstallments(int $userId, int $limit = 10): Collection
     {
-        return Installment::whereHas('contract', fn($q) => $q->where('user_id', $userId))
+        return Installment::whereHas('contract', fn ($q) => $q->where('user_id', $userId))
             ->with('contract.customer')
             ->orderByDesc('due_date')
             ->limit($limit)

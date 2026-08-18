@@ -16,16 +16,16 @@ class InstallmentController extends Controller
     public function index(Request $request)
     {
         $installments = Installment::with('contract.customer')
-            ->whereHas('contract', fn($q) => $q->where('user_id', $request->user()->id))
-            ->when($request->status, fn($q, $s) => $q->where('status', $s))
+            ->whereHas('contract', fn ($q) => $q->where('user_id', $request->user()->id))
+            ->when($request->status, fn ($q, $s) => $q->where('status', $s))
             ->orderBy('due_date')
             ->paginate(15)
             ->withQueryString();
 
         $metrics = [
-            'total_pending' => (clone $installments)->getCollection()->filter(fn($i) => $i->status === 'pending')->sum('amount_due'),
-            'total_overdue' => (clone $installments)->getCollection()->filter(fn($i) => $i->status === 'overdue')->sum('amount_due'),
-            'total_paid' => (clone $installments)->getCollection()->filter(fn($i) => $i->status === 'paid')->sum('amount_paid'),
+            'total_pending' => (clone $installments)->getCollection()->filter(fn ($i) => $i->status === 'pending')->sum('amount_due'),
+            'total_overdue' => (clone $installments)->getCollection()->filter(fn ($i) => $i->status === 'overdue')->sum('amount_due'),
+            'total_paid' => (clone $installments)->getCollection()->filter(fn ($i) => $i->status === 'paid')->sum('amount_paid'),
         ];
 
         return Inertia::render('Installments/Index', [

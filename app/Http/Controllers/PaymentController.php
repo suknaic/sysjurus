@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
-use App\Services\ReceiveInstallmentPaymentService;
-use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {

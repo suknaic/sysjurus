@@ -11,8 +11,8 @@ class SalaryController extends Controller
     public function index(Request $request)
     {
         $records = SalaryRecord::where('user_id', $request->user()->id)
-            ->when($request->status, fn($q, $s) => $q->where('status', $s))
-            ->when($request->search, fn($q, $s) => $q->where('title', 'like', "%{$s}%")->orWhere('person_name', 'like', "%{$s}%"))
+            ->when($request->status, fn ($q, $s) => $q->where('status', $s))
+            ->when($request->search, fn ($q, $s) => $q->where('title', 'like', "%{$s}%")->orWhere('person_name', 'like', "%{$s}%"))
             ->orderByDesc('due_date')
             ->paginate(15)
             ->withQueryString();

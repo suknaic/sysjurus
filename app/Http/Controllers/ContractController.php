@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contract;
-use App\Models\Customer;
 use App\Http\Requests\StoreContractRequest;
 use App\Http\Requests\UpdateContractRequest;
+use App\Models\Contract;
+use App\Models\Customer;
 use App\Services\CreateContractInstallmentsService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,8 +20,8 @@ class ContractController extends Controller
     {
         $contracts = Contract::with('customer')
             ->where('user_id', $request->user()->id)
-            ->when($request->search, fn($q, $s) => $q->where('code', 'like', "%{$s}%"))
-            ->when($request->status, fn($q, $s) => $q->where('status', $s))
+            ->when($request->search, fn ($q, $s) => $q->where('code', 'like', "%{$s}%"))
+            ->when($request->status, fn ($q, $s) => $q->where('status', $s))
             ->orderByDesc('created_at')
             ->paginate(15)
             ->withQueryString();
@@ -91,6 +91,6 @@ class ContractController extends Controller
 
     private function generateCode(): string
     {
-        return 'CTR-' . str_pad(Contract::max('id') + 1, 5, '0', STR_PAD_LEFT);
+        return 'CTR-'.str_pad(Contract::max('id') + 1, 5, '0', STR_PAD_LEFT);
     }
 }

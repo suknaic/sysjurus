@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\MessageTemplateController;

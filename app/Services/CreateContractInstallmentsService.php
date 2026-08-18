@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Contract;
 use App\Models\Installment;
-use Carbon\Carbon;
 
 class CreateContractInstallmentsService
 {

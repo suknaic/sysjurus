@@ -6,36 +6,61 @@ interface Props {
     icon: ReactNode;
     color?: 'indigo' | 'green' | 'red' | 'yellow' | 'blue';
     subtitle?: string;
+    accent?: boolean;
+    className?: string;
 }
 
 const colorStyles = {
     indigo: {
         icon: 'bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/25',
         value: 'text-gray-900',
+        bar: 'from-indigo-500 to-violet-600',
     },
     green: {
         icon: 'bg-gradient-to-br from-emerald-500 to-green-600 shadow-emerald-500/25',
         value: 'text-emerald-600',
+        bar: 'from-emerald-500 to-green-600',
     },
     red: {
         icon: 'bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/25',
         value: 'text-red-600',
+        bar: 'from-red-500 to-rose-600',
     },
     yellow: {
         icon: 'bg-gradient-to-br from-amber-500 to-orange-500 shadow-amber-500/25',
         value: 'text-amber-600',
+        bar: 'from-amber-500 to-orange-500',
     },
     blue: {
         icon: 'bg-gradient-to-br from-blue-500 to-cyan-500 shadow-blue-500/25',
         value: 'text-blue-600',
+        bar: 'from-blue-500 to-cyan-500',
     },
 };
 
-export default function StatsCard({ title, value, icon, color = 'indigo', subtitle }: Props) {
+export default function StatsCard({ title, value, icon, color = 'indigo', subtitle, accent, className = '' }: Props) {
     const styles = colorStyles[color];
 
+    if (accent) {
+        return (
+            <div className={`card-premium-hover group relative overflow-hidden ${className}`}>
+                <div className="flex items-center gap-2.5">
+                    <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${styles.icon} shadow-lg transition-transform duration-300 group-hover:scale-110`}>
+                        <span className="text-white">{icon}</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 truncate">{title}</p>
+                        <p className={`text-2xl font-extrabold leading-none tracking-tight ${styles.value}`}>{value}</p>
+                        {subtitle && <p className="text-[10px] text-gray-400 mt-1">{subtitle}</p>}
+                    </div>
+                </div>
+                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${styles.bar} opacity-60`} />
+            </div>
+        );
+    }
+
     return (
-        <div className="card-premium-hover group">
+        <div className={`card-premium-hover group ${className}`}>
             <div className="flex items-center gap-3">
                 <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${styles.icon} shadow-lg transition-transform duration-300 group-hover:scale-110`}>
                     <span className="text-white">{icon}</span>
