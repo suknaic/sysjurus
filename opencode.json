@@ -1,0 +1,24 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "mcp": {
+        "laravel-boost": {
+            "type": "local",
+            "enabled": true,
+            "command": [
+                "php",
+                "artisan",
+                "boost:mcp"
+            ]
+        },
+        "open-design": {
+            "type": "local",
+            "enabled": true,
+            "command": [
+                "od",
+                "mcp",
+                "--daemon-url",
+                "http://127.0.0.1:7456"
+            ]
+        }
+    }
+}
