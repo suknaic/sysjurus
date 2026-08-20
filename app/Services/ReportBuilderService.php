@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Contract;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class ReportBuilderService
@@ -21,11 +22,11 @@ class ReportBuilderService
         }
 
         if (! empty($filters['date_from'])) {
-            $query->where('created_at', '>=', $filters['date_from']);
+            $query->where('first_payment_date', '>=', $filters['date_from']);
         }
 
         if (! empty($filters['date_to'])) {
-            $query->where('created_at', '<=', $filters['date_to']);
+            $query->where('first_payment_date', '<=', Carbon::parse($filters['date_to'])->addDay()->toDateString());
         }
 
         return $query->orderByDesc('created_at')->get();

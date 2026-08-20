@@ -43,6 +43,10 @@ class MessageTemplateController extends Controller
 
     public function update(Request $request, MessageTemplate $messageTemplate): RedirectResponse
     {
+        if ($messageTemplate->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'category' => 'sometimes|required|in:lembrete,cobranca,aviso_final,custom',
@@ -56,8 +60,12 @@ class MessageTemplateController extends Controller
         return back()->with('success', 'Template atualizado com sucesso.');
     }
 
-    public function destroy(MessageTemplate $messageTemplate): RedirectResponse
+    public function destroy(Request $request, MessageTemplate $messageTemplate): RedirectResponse
     {
+        if ($messageTemplate->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
         if ($messageTemplate->category !== 'custom') {
             return back()->withErrors(['error' => 'Templates padrão não podem ser removidos.']);
         }

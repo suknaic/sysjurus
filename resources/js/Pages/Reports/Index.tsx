@@ -56,11 +56,11 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Data Inicio</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Vencimento De</label>
                         <input type="date" value={formFilters.date_from} onChange={(e) => setFormFilters({ ...formFilters, date_from: e.target.value })} className="input-premium" />
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Data Fim</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Vencimento Até</label>
                         <input type="date" value={formFilters.date_to} onChange={(e) => setFormFilters({ ...formFilters, date_to: e.target.value })} className="input-premium" />
                     </div>
                     <div className="flex items-end">

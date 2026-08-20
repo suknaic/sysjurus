@@ -45,6 +45,7 @@ export default function MessagesIndex({ templates }: Props) {
     const [editing, setEditing] = useState<MessageTemplate | null>(null);
     const [form, setForm] = useState(emptyForm);
     const [deleting, setDeleting] = useState<MessageTemplate | null>(null);
+    const [deletingInProgress, setDeletingInProgress] = useState(false);
 
     const openCreate = () => {
         setEditing(null);
@@ -72,12 +73,21 @@ export default function MessagesIndex({ templates }: Props) {
 
     const confirmDelete = (t: MessageTemplate) => {
         setDeleting(t);
+        setDeletingInProgress(false);
     };
 
     const executeDelete = () => {
-        if (!deleting) return;
+        if (!deleting || deletingInProgress) return;
+        setDeletingInProgress(true);
         router.delete(`/message-templates/${deleting.id}`, {
-            onSuccess: () => setDeleting(null),
+            onSuccess: () => {
+                setDeleting(null);
+                setDeletingInProgress(false);
+            },
+            onError: () => {
+                setDeleting(null);
+                setDeletingInProgress(false);
+            },
         });
     };
 
@@ -186,13 +196,15 @@ export default function MessagesIndex({ templates }: Props) {
                 </div>
             </Modal>
 
-            <Modal show={!!deleting} onClose={() => setDeleting(null)} title="Confirmar Exclusão">
+            <Modal show={!!deleting} onClose={() => { if (!deletingInProgress) setDeleting(null); }} title="Confirmar Exclusão">
                 <p className="text-sm text-[var(--text-muted)] mb-6">
                     Tem certeza que deseja remover o template <strong className="text-[var(--text-primary)]">{deleting?.name}</strong>? Esta ação não pode ser desfeita.
                 </p>
                 <div className="flex justify-end gap-3">
-                    <button onClick={() => setDeleting(null)} className="btn-secondary">Cancelar</button>
-                    <button onClick={executeDelete} className="btn-danger">Remover</button>
+                    <button onClick={() => setDeleting(null)} className="btn-secondary" disabled={deletingInProgress}>Cancelar</button>
+                    <button onClick={executeDelete} className="btn-danger" disabled={deletingInProgress}>
+                        {deletingInProgress ? 'Removendo...' : 'Remover'}
+                    </button>
                 </div>
             </Modal>
         </AuthenticatedLayout>

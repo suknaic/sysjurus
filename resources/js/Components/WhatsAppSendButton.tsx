@@ -21,6 +21,11 @@ function formatDateBR(date: string): string {
     return `${day}/${m}/${y}`;
 }
 
+function calcDaysOverdue(installment: Installment): number {
+    const due = new Date(installment.due_date.split('T')[0] + 'T12:00:00');
+    return Math.max(0, Math.floor((Date.now() - due.getTime()) / 86400000));
+}
+
 function renderTemplate(template: string, installment: Installment): string {
     const customer = installment.contract?.customer;
     const contract = installment.contract;
@@ -36,7 +41,7 @@ function renderTemplate(template: string, installment: Installment): string {
         valor_pago: 'R$ ' + amountPaid.toFixed(2).replace('.', ','),
         valor_restante: 'R$ ' + remaining.toFixed(2).replace('.', ','),
         data_vencimento: formatDateBR(installment.due_date),
-        dias_atraso: String(Math.max(0, Math.floor((Date.now() - new Date(installment.due_date + 'T12:00:00').getTime()) / 86400000))),
+        dias_atraso: String(calcDaysOverdue(installment)),
         data_hoje: formatDateBR(new Date().toISOString()),
         telefone_cliente: customer?.phone ?? '',
     };
@@ -52,6 +57,7 @@ export default function WhatsAppSendButton({ installment }: Props) {
     const [open, setOpen] = useState(false);
     const [templates, setTemplates] = useState<MessageTemplate[]>([]);
     const [loading, setLoading] = useState(false);
+    const daysOverdue = calcDaysOverdue(installment);
 
     useEffect(() => {
         if (!open) return;
@@ -119,16 +125,22 @@ export default function WhatsAppSendButton({ installment }: Props) {
                     ) : templates.length === 0 ? (
                         <div className="py-8 text-center text-sm text-[var(--text-muted)]">Nenhum template encontrado.</div>
                     ) : (
-                        templates.map(template => (
-                            <button
-                                key={template.id}
-                                onClick={() => sendMessage(template.message)}
-                                className="w-full text-left rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-input)] p-4 transition-all duration-200 hover:border-emerald-500/40 hover:bg-emerald-500/5"
-                            >
-                                <p className="text-sm font-semibold text-[var(--text-primary)]">{template.name}</p>
-                                <p className="text-xs text-[var(--text-muted)] mt-1.5 line-clamp-3 whitespace-pre-wrap">{renderTemplate(template.message, installment)}</p>
-                            </button>
-                        ))
+                        (() => {
+                            const filtered = templates.filter(t => daysOverdue > 0 || (t.category !== 'cobranca' && t.category !== 'aviso_final'));
+                            if (filtered.length === 0) {
+                                return <div className="py-8 text-center text-sm text-[var(--text-muted)]">Templates de cobrança e aviso final só estão disponíveis para parcelas em atraso.</div>;
+                            }
+                            return filtered.map(template => (
+                                <button
+                                    key={template.id}
+                                    onClick={() => sendMessage(template.message)}
+                                    className="w-full text-left rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-input)] p-4 transition-all duration-200 hover:border-emerald-500/40 hover:bg-emerald-500/5"
+                                >
+                                    <p className="text-sm font-semibold text-[var(--text-primary)]">{template.name}</p>
+                                    <p className="text-xs text-[var(--text-muted)] mt-1.5 line-clamp-3 whitespace-pre-wrap">{renderTemplate(template.message, installment)}</p>
+                                </button>
+                            ));
+                        })()
                     )}
                 </div>
             </div>
