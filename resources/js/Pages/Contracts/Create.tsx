@@ -7,8 +7,8 @@ interface Props { customers: Customer[]; }
 
 export default function ContractsCreate({ customers }: Props) {
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Novo Contrato</h2>}>
-            <Head title="SysJuros - Novo Contrato" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Novo Contrato</h2>}>
+            <Head title="Receba+ - Novo Contrato" />
             <ContractForm customers={customers} />
         </AuthenticatedLayout>
     );

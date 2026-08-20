@@ -3,14 +3,14 @@ interface Props {
 }
 
 const statusStyles: Record<string, string> = {
-    active: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-    pending: 'bg-amber-50 text-amber-700 ring-amber-600/20',
-    overdue: 'bg-red-50 text-red-700 ring-red-600/20',
-    paid: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-    partial: 'bg-blue-50 text-blue-700 ring-blue-600/20',
-    cancelled: 'bg-gray-100 text-gray-600 ring-gray-500/20',
-    completed: 'bg-indigo-50 text-indigo-700 ring-indigo-600/20',
-    received: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
+    active: 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20',
+    pending: 'bg-amber-500/10 text-amber-400 ring-amber-500/20',
+    overdue: 'bg-red-500/10 text-red-400 ring-red-500/20',
+    paid: 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20',
+    partial: 'bg-blue-500/10 text-blue-400 ring-blue-500/20',
+    cancelled: 'bg-[var(--bg-input)] text-[var(--text-muted)] ring-[var(--border-subtle)]',
+    completed: 'bg-[#C9A84C]/10 text-[#D4AF37] ring-[#C9A84C]/20',
+    received: 'bg-emerald-500/10 text-emerald-400 ring-emerald-500/20',
 };
 
 const statusLabels: Record<string, string> = {
@@ -26,7 +26,7 @@ const statusLabels: Record<string, string> = {
 
 export default function StatusBadge({ status }: Props) {
     return (
-        <span className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${statusStyles[status] || 'bg-gray-100 text-gray-600 ring-gray-500/20'}`}>
+        <span className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${statusStyles[status] || 'bg-[var(--bg-input)] text-[var(--text-muted)] ring-[var(--border-subtle)]'}`}>
             {statusLabels[status] || status}
         </span>
     );

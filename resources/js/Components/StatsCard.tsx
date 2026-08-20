@@ -12,28 +12,28 @@ interface Props {
 
 const colorStyles = {
     indigo: {
-        icon: 'bg-gradient-to-br from-indigo-500 to-violet-600 shadow-indigo-500/25',
-        value: 'text-gray-900',
-        bar: 'from-indigo-500 to-violet-600',
+        icon: 'gradient-gold shadow-amber-500/20',
+        value: 'text-white',
+        bar: 'from-[#C9A84C] to-[#D4AF37]',
     },
     green: {
         icon: 'bg-gradient-to-br from-emerald-500 to-green-600 shadow-emerald-500/25',
-        value: 'text-emerald-600',
+        value: 'text-emerald-400',
         bar: 'from-emerald-500 to-green-600',
     },
     red: {
         icon: 'bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/25',
-        value: 'text-red-600',
+        value: 'text-red-400',
         bar: 'from-red-500 to-rose-600',
     },
     yellow: {
         icon: 'bg-gradient-to-br from-amber-500 to-orange-500 shadow-amber-500/25',
-        value: 'text-amber-600',
+        value: 'text-amber-400',
         bar: 'from-amber-500 to-orange-500',
     },
     blue: {
         icon: 'bg-gradient-to-br from-blue-500 to-cyan-500 shadow-blue-500/25',
-        value: 'text-blue-600',
+        value: 'text-blue-400',
         bar: 'from-blue-500 to-cyan-500',
     },
 };
@@ -49,12 +49,12 @@ export default function StatsCard({ title, value, icon, color = 'indigo', subtit
                         <span className="text-white">{icon}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                        <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 truncate">{title}</p>
+                        <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] truncate">{title}</p>
                         <p className={`text-2xl font-extrabold leading-none tracking-tight ${styles.value}`}>{value}</p>
-                        {subtitle && <p className="text-[10px] text-gray-400 mt-1">{subtitle}</p>}
+                        {subtitle && <p className="text-[10px] text-[var(--text-faint)] mt-1">{subtitle}</p>}
                     </div>
                 </div>
-                <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${styles.bar} opacity-60`} />
+                <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r ${styles.bar} opacity-60`} />
             </div>
         );
     }
@@ -66,9 +66,9 @@ export default function StatsCard({ title, value, icon, color = 'indigo', subtit
                     <span className="text-white">{icon}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400 truncate">{title}</p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-muted)] truncate">{title}</p>
                     <p className={`text-3xl font-extrabold leading-tight tracking-tight ${styles.value}`}>{value}</p>
-                    {subtitle && <p className="text-[11px] text-gray-400 mt-0.5">{subtitle}</p>}
+                    {subtitle && <p className="text-[11px] text-[var(--text-faint)] mt-0.5">{subtitle}</p>}
                 </div>
             </div>
         </div>

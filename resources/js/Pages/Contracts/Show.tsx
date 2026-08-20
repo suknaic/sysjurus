@@ -18,11 +18,11 @@ function formatDate(date: string): string {
 
 export default function ContractsShow({ contract }: Props) {
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Contrato {contract.code}</h2>}>
-            <Head title={`SysJuros - ${contract.code}`} />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Contrato {contract.code}</h2>}>
+            <Head title={`Receba+ - ${contract.code}`} />
 
             <div className="mb-6">
-                <Link href="/contracts" className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 transition-colors">
+                <Link href="/contracts" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#C9A84C] hover:text-[#D4AF37] transition-colors">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" /></svg>
                     Voltar para contratos
                 </Link>
@@ -30,23 +30,23 @@ export default function ContractsShow({ contract }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <div className="card-premium">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Cliente</p>
-                    <p className="text-lg font-bold text-gray-900">{contract.customer?.name}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Cliente</p>
+                    <p className="text-lg font-bold text-[var(--text-primary)]">{contract.customer?.name}</p>
                 </div>
                 <div className="card-premium">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Valor Total</p>
-                    <p className="text-lg font-bold text-indigo-600">{formatCurrency(contract.amount)}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Valor Total</p>
+                    <p className="text-lg font-bold text-[#C9A84C]">{formatCurrency(contract.amount)}</p>
                 </div>
                 <div className="card-premium">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Status</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Status</p>
                     <StatusBadge status={contract.status} />
                 </div>
             </div>
 
             <div className="card-premium mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-5">
+                <h3 className="text-lg font-bold text-[var(--text-primary)] mb-5 font-['Montserrat']">
                     <span className="flex items-center gap-2">
-                        <svg className="h-5 w-5 text-indigo-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                        <svg className="h-5 w-5 text-[#C9A84C]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
                         Detalhes
                     </span>
                 </h3>
@@ -58,9 +58,9 @@ export default function ContractsShow({ contract }: Props) {
                         ['Juros', `${contract.interest_rate}%`],
                         ['Multa', formatCurrency(contract.fine_amount)],
                     ].map(([label, value]) => (
-                        <div key={label as string} className="p-3 rounded-xl bg-gray-50">
-                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">{label}</p>
-                            <p className="text-sm font-bold text-gray-900">{value}</p>
+                        <div key={label as string} className="p-3 rounded-xl bg-[var(--bg-input)] border border-[var(--border-subtle)]">
+                            <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">{label}</p>
+                            <p className="text-sm font-bold text-[var(--text-primary)]">{value}</p>
                         </div>
                     ))}
                 </div>
@@ -68,8 +68,8 @@ export default function ContractsShow({ contract }: Props) {
 
             {contract.installments && contract.installments.length > 0 && (
                 <div className="card-premium overflow-hidden">
-                    <div className="px-6 py-5 border-b border-gray-100">
-                        <h3 className="text-lg font-bold text-gray-900">Parcelas</h3>
+                    <div className="px-6 py-5 border-b border-[var(--border-subtle)]">
+                        <h3 className="text-lg font-bold text-[var(--text-primary)] font-['Montserrat']">Parcelas</h3>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full table-premium">
@@ -86,17 +86,17 @@ export default function ContractsShow({ contract }: Props) {
                             <tbody>
                                 {contract.installments.map((inst) => (
                                     <tr key={inst.id}>
-                                        <td className="font-medium text-gray-900">{inst.installment_number}ª</td>
-                                        <td className="text-gray-500">{formatDate(inst.due_date)}</td>
-                                        <td className="font-semibold text-gray-900">{formatCurrency(inst.amount_due)}</td>
-                                        <td className="text-gray-500">{formatCurrency(inst.amount_paid)}</td>
+                                        <td className="font-medium text-[var(--text-primary)]">{inst.installment_number}ª</td>
+                                        <td className="text-[var(--text-muted)]">{formatDate(inst.due_date)}</td>
+                                        <td className="font-semibold text-[var(--text-primary)]">{formatCurrency(inst.amount_due)}</td>
+                                        <td className="text-[var(--text-muted)]">{formatCurrency(inst.amount_paid)}</td>
                                         <td><StatusBadge status={inst.status} /></td>
                                         <td>
                                             <div className="flex items-center gap-2">
                                                 {(inst.status === 'pending' || inst.status === 'overdue' || inst.status === 'partial') && (
                                                     <WhatsAppSendButton installment={inst} />
                                                 )}
-                                                <Link href={`/installments/${inst.id}`} className="text-indigo-600 hover:text-indigo-700 font-semibold text-sm">
+                                                <Link href={`/installments/${inst.id}`} className="text-[#C9A84C] hover:text-[#D4AF37] font-semibold text-sm transition-colors">
                                                     Detalhes
                                                 </Link>
                                             </div>

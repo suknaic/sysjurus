@@ -53,16 +53,16 @@ class SalaryController extends Controller
         return back()->with('success', 'Lançamento criado com sucesso.');
     }
 
-    public function update(Request $request, SalaryRecord $record)
+    public function update(Request $request, SalaryRecord $salary)
     {
-        $record->update($request->only(['status', 'received_at']));
+        $salary->update($request->only(['status', 'received_at']));
 
         return back()->with('success', 'Registro atualizado com sucesso.');
     }
 
-    public function destroy(SalaryRecord $record)
+    public function destroy(SalaryRecord $salary)
     {
-        $record->delete();
+        $salary->delete();
 
         return back()->with('success', 'Registro removido com sucesso.');
     }

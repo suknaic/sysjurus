@@ -41,7 +41,7 @@ class MessageTemplateController extends Controller
         return back()->with('success', 'Template criado com sucesso.');
     }
 
-    public function update(Request $request, MessageTemplate $template): RedirectResponse
+    public function update(Request $request, MessageTemplate $messageTemplate): RedirectResponse
     {
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
@@ -51,14 +51,18 @@ class MessageTemplateController extends Controller
             'sort_order' => 'sometimes|integer',
         ]);
 
-        $template->update($validated);
+        $messageTemplate->update($validated);
 
         return back()->with('success', 'Template atualizado com sucesso.');
     }
 
-    public function destroy(MessageTemplate $template): RedirectResponse
+    public function destroy(MessageTemplate $messageTemplate): RedirectResponse
     {
-        $template->delete();
+        if ($messageTemplate->category !== 'custom') {
+            return back()->withErrors(['error' => 'Templates padrão não podem ser removidos.']);
+        }
+
+        $messageTemplate->delete();
 
         return back()->with('success', 'Template removido com sucesso.');
     }

@@ -33,9 +33,9 @@ function formatDate(date: string): string {
 export default function DashboardIndex({ metrics, recentInstallments }: Props) {
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Dashboard</h2>}
+            header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Dashboard</h2>}
         >
-            <Head title="SysJuros - Dashboard" />
+            <Head title="Receba+ - Dashboard" />
             <FlashMessage />
 
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -50,13 +50,13 @@ export default function DashboardIndex({ metrics, recentInstallments }: Props) {
                 <StatsCard title="Contratos Ativos" value={metrics.totalContracts} icon={<svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>} color="blue" subtitle={`${metrics.pendingCount} parcelas pendentes`} accent className="h-24" />
                 <div className="card-premium-hover h-24 flex flex-col justify-center">
                     <div>
-                        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-2.5">Acoes Rapidas</h3>
+                        <h3 className="text-[10px] font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-2.5">Acoes Rapidas</h3>
                         <div className="flex flex-wrap gap-2">
-                            <Link href="/customers/create" className="btn-primary text-xs px-3 py-2">
+                            <Link href="/customers/create" className="btn-primary text-xs !px-3 !py-2">
                                 <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" /></svg>
                                 Novo Cliente
                             </Link>
-                            <Link href="/contracts/create" className="btn-secondary text-xs px-3 py-2">
+                            <Link href="/contracts/create" className="btn-secondary text-xs !px-3 !py-2">
                                 <svg className="h-3.5 w-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                                 Novo Contrato
                             </Link>
@@ -66,16 +66,16 @@ export default function DashboardIndex({ metrics, recentInstallments }: Props) {
             </div>
 
             <div className="card-premium overflow-hidden">
-                <div className="px-6 py-5 border-b border-gray-100">
-                    <h3 className="text-lg font-bold text-gray-900">Movimentacoes Recentes</h3>
+                <div className="px-6 py-5 border-b border-[var(--border-subtle)]">
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] font-['Montserrat']">Movimentacoes Recentes</h3>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full table-premium">
                         <thead>
                             <tr>
-                                <th>Parcela</th>
                                 <th>Cliente</th>
-                                <th>Vencimento</th>
+                                <th className="hidden sm:table-cell">Parcela</th>
+                                <th className="hidden md:table-cell">Vencimento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
                             </tr>
@@ -83,15 +83,18 @@ export default function DashboardIndex({ metrics, recentInstallments }: Props) {
                         <tbody>
                             {recentInstallments.length === 0 ? (
                                 <tr>
-                                    <td colSpan={5} className="px-6 py-12 text-center text-sm text-gray-500">Nenhum registro encontrado</td>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">Nenhum registro encontrado</td>
                                 </tr>
                             ) : (
                                 recentInstallments.map((inst) => (
                                     <tr key={inst.id}>
-                                        <td className="font-medium text-gray-900">{inst.contract?.code} - {inst.installment_number}ª</td>
-                                        <td className="text-gray-500">{inst.contract?.customer?.name}</td>
-                                        <td className="text-gray-500">{formatDate(inst.due_date)}</td>
-                                        <td className="font-semibold text-gray-900">{formatCurrency(inst.amount_due)}</td>
+                                        <td className="font-semibold text-[#C9A84C]">
+                                            {inst.contract?.customer?.name}
+                                            <span className="sm:hidden text-xs text-[var(--text-faint)] block">{inst.contract?.code} - {inst.installment_number}ª</span>
+                                        </td>
+                                        <td className="hidden sm:table-cell font-medium text-[var(--text-primary)]">{inst.contract?.code} - {inst.installment_number}ª</td>
+                                        <td className="text-[var(--text-muted)]">{formatDate(inst.due_date)}</td>
+                                        <td className="font-semibold text-[var(--text-primary)]">{formatCurrency(inst.amount_due)}</td>
                                         <td><StatusBadge status={inst.status} /></td>
                                     </tr>
                                 ))

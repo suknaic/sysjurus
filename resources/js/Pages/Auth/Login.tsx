@@ -19,27 +19,25 @@ export default function Login({ status, canResetPassword }: Props) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 gradient-mesh px-4">
-            <Head title="SysJuros - Login" />
+        <div className="min-h-screen flex items-center justify-center gradient-mesh px-4">
+            <Head title="Receba+ - Login" />
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary shadow-xl shadow-indigo-500/30 mb-4">
-                        <span className="text-xl font-bold text-white">$</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">SysJuros</h1>
-                    <p className="text-sm text-gray-500 mt-1">Gestao Financeira</p>
+                    <img src="/icon-receba.png" alt="Receba+" className="mx-auto h-16 w-16 rounded-2xl object-contain mb-4" />
+                    <h1 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Receba+</h1>
+                    <p className="text-sm text-[var(--text-muted)] mt-1.5 tracking-wider uppercase text-[11px]">Gestao Financeira</p>
                 </div>
 
                 <div className="card-premium p-8">
                     {status && (
-                        <div className="mb-4 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 border border-emerald-200">
+                        <div className="mb-4 rounded-xl bg-emerald-500/10 p-3 text-sm font-medium text-emerald-400 border border-emerald-500/20">
                             {status}
                         </div>
                     )}
 
                     <form onSubmit={submit} className="space-y-5">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Email</label>
                             <input
                                 type="email"
                                 value={data.email}
@@ -48,10 +46,10 @@ export default function Login({ status, canResetPassword }: Props) {
                                 required
                                 placeholder="seu@email.com"
                             />
-                            {errors.email && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.email}</p>}
+                            {errors.email && <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.email}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Senha</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Senha</label>
                             <input
                                 type="password"
                                 value={data.password}
@@ -60,16 +58,16 @@ export default function Login({ status, canResetPassword }: Props) {
                                 required
                                 placeholder="••••••••"
                             />
-                            {errors.password && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.password}</p>}
+                            {errors.password && <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.password}</p>}
                         </div>
                         <div className="flex items-center">
                             <input
                                 type="checkbox"
                                 checked={data.remember}
                                 onChange={(e) => setData('remember', e.target.checked)}
-                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                className="h-4 w-4 rounded border-[var(--border-default)] text-[#C9A84C] focus:ring-[#C9A84C]/50 bg-white/5"
                             />
-                            <span className="ml-2 text-sm text-gray-600">Lembrar de mim</span>
+                            <span className="ml-2 text-sm text-[var(--text-muted)]">Lembrar de mim</span>
                         </div>
                         <button
                             type="submit"
@@ -86,15 +84,15 @@ export default function Login({ status, canResetPassword }: Props) {
                     </form>
 
                     {canResetPassword && (
-                        <Link href="/forgot-password" className="block mt-4 text-center text-sm text-indigo-600 hover:text-indigo-500 font-medium">
+                        <Link href="/forgot-password" className="block mt-4 text-center text-sm text-[#C9A84C] hover:text-[#D4AF37] font-medium transition-colors">
                             Esqueceu sua senha?
                         </Link>
                     )}
 
-                    <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-                        <p className="text-sm text-gray-500">
+                    <div className="mt-6 pt-6 border-t border-[var(--border-subtle)] text-center">
+                        <p className="text-sm text-[var(--text-muted)]">
                             Nao tem conta?{' '}
-                            <Link href="/register" className="text-indigo-600 hover:text-indigo-500 font-semibold">
+                            <Link href="/register" className="text-[#C9A84C] hover:text-[#D4AF37] font-semibold transition-colors">
                                 Cadastre-se
                             </Link>
                         </p>

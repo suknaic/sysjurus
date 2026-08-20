@@ -6,6 +6,7 @@ import StatusBadge from '@/Components/StatusBadge';
 import StatsCard from '@/Components/StatsCard';
 import FlashMessage from '@/Components/FlashMessage';
 import Modal from '@/Components/Modal';
+import ConfirmDialog from '@/Components/ConfirmDialog';
 import { Head, router } from '@inertiajs/react';
 import { PageProps, SalaryRecord, PaginatedData } from '@/types';
 import { useState } from 'react';
@@ -26,6 +27,8 @@ function formatDate(date: string): string {
 
 export default function SalariesIndex({ records, metrics, filters }: Props) {
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState<number | null>(null);
     const [search, setSearch] = useState(filters.search || '');
     const [form, setForm] = useState({ title: '', person_name: '', amount: '', due_date: '', category: '', notes: '' });
 
@@ -44,14 +47,22 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
         router.put(`/salaries/${id}`, { status: 'received', received_at: new Date().toISOString() });
     };
 
+    const confirmDelete = () => {
+        if (deleteId !== null) {
+            router.delete(`/salaries/${deleteId}`);
+        }
+        setShowDeleteModal(false);
+        setDeleteId(null);
+    };
+
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         router.get('/salaries', { status: filters.status, search }, { preserveState: true });
     };
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Salarios</h2>}>
-            <Head title="SysJuros - Salarios" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Salarios</h2>}>
+            <Head title="Receba+ - Salarios" />
             <FlashMessage />
 
             <PageHeader title="Salarios">
@@ -79,7 +90,7 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
             <form onSubmit={handleSearch} className="mb-6 flex gap-3">
                 <div className="relative flex-1">
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                        <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                        <svg className="h-4 w-4 text-[var(--text-faint)]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
                     </div>
                     <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar..." className="input-premium pl-10" />
                 </div>
@@ -110,11 +121,11 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
                                 <tbody>
                                     {records.data.map((record) => (
                                         <tr key={record.id}>
-                                            <td className="font-semibold text-gray-900">{record.title}</td>
-                                            <td className="hidden sm:table-cell text-gray-500">{record.person_name || '-'}</td>
-                                            <td className="font-semibold text-gray-900">{formatCurrency(record.amount)}</td>
-                                            <td className="hidden md:table-cell text-gray-500">{formatDate(record.due_date)}</td>
-                                            <td className="hidden lg:table-cell text-gray-500">{record.category || '-'}</td>
+                                            <td className="font-semibold text-[var(--text-primary)]">{record.title}</td>
+                                            <td className="hidden sm:table-cell text-[var(--text-muted)]">{record.person_name || '-'}</td>
+                                            <td className="font-semibold text-[var(--text-primary)]">{formatCurrency(record.amount)}</td>
+                                            <td className="hidden md:table-cell text-[var(--text-muted)]">{formatDate(record.due_date)}</td>
+                                            <td className="hidden lg:table-cell text-[var(--text-muted)]">{record.category || '-'}</td>
                                             <td><StatusBadge status={record.status} /></td>
                                             <td className="text-right">
                                                 <div className="flex items-center justify-end gap-2">
@@ -123,7 +134,7 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
                                                             Receber
                                                         </button>
                                                     )}
-                                                    <button onClick={() => { if (confirm('Remover?')) router.delete(`/salaries/${record.id}`); }} className="text-red-500 hover:text-red-700 text-xs font-medium hover:bg-red-50 rounded-lg px-3 py-1.5 transition-colors">
+                                                    <button onClick={() => { setDeleteId(record.id); setShowDeleteModal(true); }} className="text-red-400 hover:text-red-300 text-xs font-medium hover:bg-red-500/10 rounded-lg px-3 py-1.5 transition-colors">
                                                         Remover
                                                     </button>
                                                 </div>
@@ -142,23 +153,23 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Titulo *</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Titulo *</label>
                             <input type="text" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="input-premium" required />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Pessoa</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Pessoa</label>
                             <input type="text" value={form.person_name} onChange={(e) => setForm({ ...form, person_name: e.target.value })} className="input-premium" />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Valor (R$) *</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Valor (R$) *</label>
                             <input type="number" step="0.01" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} className="input-premium" required />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Vencimento *</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Vencimento *</label>
                             <input type="date" value={form.due_date} onChange={(e) => setForm({ ...form, due_date: e.target.value })} className="input-premium" required />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Categoria</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Categoria</label>
                             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="select-premium">
                                 <option value="">Selecione</option>
                                 <option value="Salario">Salario</option>
@@ -169,16 +180,25 @@ export default function SalariesIndex({ records, metrics, filters }: Props) {
                             </select>
                         </div>
                         <div className="md:col-span-2">
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Observacoes</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Observacoes</label>
                             <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} className="input-premium" />
                         </div>
                     </div>
-                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-subtle)]">
                         <button type="button" onClick={() => setShowModal(false)} className="btn-secondary">Cancelar</button>
                         <button type="submit" className="btn-primary">Salvar</button>
                     </div>
                 </form>
             </Modal>
+
+            <ConfirmDialog
+                show={showDeleteModal}
+                title="Remover Lancamento"
+                message="Tem certeza que deseja remover este lancamento? Esta acao nao pode ser desfeita."
+                confirmLabel="Remover"
+                onConfirm={confirmDelete}
+                onClose={() => { setShowDeleteModal(false); setDeleteId(null); }}
+            />
         </AuthenticatedLayout>
     );
 }

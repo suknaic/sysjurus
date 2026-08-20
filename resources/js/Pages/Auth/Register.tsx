@@ -15,21 +15,19 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 gradient-mesh px-4">
-            <Head title="SysJuros - Cadastro" />
+        <div className="min-h-screen flex items-center justify-center gradient-mesh px-4">
+            <Head title="Receba+ - Cadastro" />
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary shadow-xl shadow-indigo-500/30 mb-4">
-                        <span className="text-xl font-bold text-white">$</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">SysJuros</h1>
-                    <p className="text-sm text-gray-500 mt-1">Criar nova conta</p>
+                    <img src="/icon-receba.png" alt="Receba+" className="mx-auto h-16 w-16 rounded-2xl object-contain gold-glow mb-4" />
+                    <h1 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Receba+</h1>
+                    <p className="text-sm text-[var(--text-muted)] mt-1.5 tracking-wider uppercase text-[11px]">Criar nova conta</p>
                 </div>
 
                 <div className="card-premium p-8">
                     <form onSubmit={submit} className="space-y-5">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nome</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Nome</label>
                             <input
                                 type="text"
                                 value={data.name}
@@ -38,10 +36,10 @@ export default function Register() {
                                 required
                                 placeholder="Seu nome completo"
                             />
-                            {errors.name && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.name}</p>}
+                            {errors.name && <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.name}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Email</label>
                             <input
                                 type="email"
                                 value={data.email}
@@ -50,10 +48,10 @@ export default function Register() {
                                 required
                                 placeholder="seu@email.com"
                             />
-                            {errors.email && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.email}</p>}
+                            {errors.email && <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.email}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Senha</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Senha</label>
                             <input
                                 type="password"
                                 value={data.password}
@@ -62,10 +60,10 @@ export default function Register() {
                                 required
                                 placeholder="••••••••"
                             />
-                            {errors.password && <p className="mt-1.5 text-sm text-red-500 font-medium">{errors.password}</p>}
+                            {errors.password && <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.password}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Confirmar Senha</label>
+                            <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Confirmar Senha</label>
                             <input
                                 type="password"
                                 value={data.password_confirmation}
@@ -89,10 +87,10 @@ export default function Register() {
                         </button>
                     </form>
 
-                    <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-                        <p className="text-sm text-gray-500">
+                    <div className="mt-6 pt-6 border-t border-[var(--border-subtle)] text-center">
+                        <p className="text-sm text-[var(--text-muted)]">
                             Ja tem conta?{' '}
-                            <Link href="/login" className="text-indigo-600 hover:text-indigo-500 font-semibold">
+                            <Link href="/login" className="text-[#C9A84C] hover:text-[#D4AF37] font-semibold transition-colors">
                                 Entrar
                             </Link>
                         </p>

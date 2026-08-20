@@ -32,15 +32,15 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
     const totalPaid = contracts.reduce((sum, c) => sum + (c.installments?.filter(i => i.status === 'paid').reduce((s, i) => s + Number(i.amount_paid), 0) || 0), 0);
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Relatorios</h2>}>
-            <Head title="SysJuros - Relatorios" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Relatorios</h2>}>
+            <Head title="Receba+ - Relatorios" />
 
             <PageHeader title="Relatorios" />
 
             <form onSubmit={handleFilter} className="card-premium mb-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Status</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Status</label>
                         <select value={formFilters.status} onChange={(e) => setFormFilters({ ...formFilters, status: e.target.value })} className="select-premium">
                             <option value="">Todos</option>
                             <option value="active">Ativo</option>
@@ -49,18 +49,18 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Cliente</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Cliente</label>
                         <select value={formFilters.customer_id} onChange={(e) => setFormFilters({ ...formFilters, customer_id: e.target.value })} className="select-premium">
                             <option value="">Todos</option>
                             {customers.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Data Inicio</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Data Inicio</label>
                         <input type="date" value={formFilters.date_from} onChange={(e) => setFormFilters({ ...formFilters, date_from: e.target.value })} className="input-premium" />
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1.5">Data Fim</label>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1.5">Data Fim</label>
                         <input type="date" value={formFilters.date_to} onChange={(e) => setFormFilters({ ...formFilters, date_to: e.target.value })} className="input-premium" />
                     </div>
                     <div className="flex items-end">
@@ -74,16 +74,16 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div className="card-premium text-center">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Total Contratos</p>
-                    <p className="text-3xl font-bold text-gray-900">{contracts.length}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Total Contratos</p>
+                    <p className="text-3xl font-bold text-[var(--text-primary)]">{contracts.length}</p>
                 </div>
                 <div className="card-premium text-center">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Valor Total</p>
-                    <p className="text-3xl font-bold text-blue-600">{formatCurrency(totalAmount)}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Valor Total</p>
+                    <p className="text-3xl font-bold text-blue-400">{formatCurrency(totalAmount)}</p>
                 </div>
                 <div className="card-premium text-center">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">Total Recebido</p>
-                    <p className="text-3xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)] mb-1">Total Recebido</p>
+                    <p className="text-3xl font-bold text-emerald-400">{formatCurrency(totalPaid)}</p>
                 </div>
             </div>
 
@@ -92,8 +92,8 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
                     <table className="w-full table-premium">
                         <thead>
                             <tr>
-                                <th>Codigo</th>
                                 <th>Cliente</th>
+                                <th className="hidden sm:table-cell">Codigo</th>
                                 <th>Valor</th>
                                 <th className="hidden sm:table-cell">Parcelas</th>
                                 <th className="hidden md:table-cell">Frequencia</th>
@@ -102,15 +102,18 @@ export default function ReportsIndex({ contracts, customers, filters }: Props) {
                         </thead>
                         <tbody>
                             {contracts.length === 0 ? (
-                                <tr><td colSpan={6} className="px-6 py-12 text-center text-sm text-gray-500">Nenhum resultado encontrado</td></tr>
+                                <tr><td colSpan={6} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">Nenhum resultado encontrado</td></tr>
                             ) : (
                                 contracts.map((contract) => (
                                     <tr key={contract.id}>
-                                        <td className="font-semibold text-indigo-600">{contract.code}</td>
-                                        <td className="text-gray-500">{contract.customer?.name}</td>
-                                        <td className="font-semibold text-gray-900">{formatCurrency(contract.amount)}</td>
-                                        <td className="hidden sm:table-cell text-gray-500">{contract.total_installments}x</td>
-                                        <td className="hidden md:table-cell text-gray-500">{contract.payment_frequency}</td>
+                                        <td className="font-semibold text-[#C9A84C]">
+                                            {contract.customer?.name}
+                                            <span className="sm:hidden text-xs text-[var(--text-faint)] block">{contract.code}</span>
+                                        </td>
+                                        <td className="hidden sm:table-cell font-semibold text-[#C9A84C]">{contract.code}</td>
+                                        <td className="font-semibold text-[var(--text-primary)]">{formatCurrency(contract.amount)}</td>
+                                        <td className="hidden sm:table-cell text-[var(--text-muted)]">{contract.total_installments}x</td>
+                                        <td className="hidden md:table-cell text-[var(--text-muted)]">{contract.payment_frequency}</td>
                                         <td><StatusBadge status={contract.status} /></td>
                                     </tr>
                                 ))

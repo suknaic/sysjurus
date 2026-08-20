@@ -28,10 +28,10 @@ export default function FlashMessage() {
     if (!visible) return null;
 
     return (
-        <div className={`fixed top-4 right-4 z-[60] rounded-xl p-4 premium-shadow-lg animate-slide-in-right ${
+        <div className={`fixed top-4 right-4 z-[60] rounded-xl p-4 premium-shadow-lg animate-slide-in-right backdrop-blur-xl ${
             type === 'success'
-                ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-                : 'bg-red-50 border border-red-200 text-red-800'
+                ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
+                : 'bg-red-500/10 border border-red-500/20 text-red-400'
         }`}>
             <div className="flex items-center gap-3">
                 <div className={`flex h-6 w-6 items-center justify-center rounded-full ${
@@ -40,7 +40,7 @@ export default function FlashMessage() {
                     <span className="text-white text-xs font-bold">{type === 'success' ? '✓' : '✕'}</span>
                 </div>
                 <span className="text-sm font-semibold">{message}</span>
-                <button onClick={() => setVisible(false)} className="ml-2 opacity-50 hover:opacity-100 transition-opacity rounded-lg p-0.5 hover:bg-black/5">
+                <button onClick={() => setVisible(false)} className="ml-2 opacity-50 hover:opacity-100 transition-opacity rounded-lg p-0.5 hover:bg-white/5">
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>

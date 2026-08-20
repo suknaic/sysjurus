@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Installment, MessageTemplate } from '@/types';
 
 interface Props {
@@ -23,14 +24,16 @@ function formatDateBR(date: string): string {
 function renderTemplate(template: string, installment: Installment): string {
     const customer = installment.contract?.customer;
     const contract = installment.contract;
-    const remaining = installment.amount_due - installment.amount_paid;
+    const amountDue = Number(installment.amount_due) || 0;
+    const amountPaid = Number(installment.amount_paid) || 0;
+    const remaining = amountDue - amountPaid;
 
     const vars: Record<string, string> = {
         nome_cliente: customer?.name ?? '',
         codigo_contrato: contract?.code ?? '',
         numero_parcela: installment.installment_number + 'ª',
-        valor_parcela: 'R$ ' + installment.amount_due.toFixed(2).replace('.', ','),
-        valor_pago: 'R$ ' + installment.amount_paid.toFixed(2).replace('.', ','),
+        valor_parcela: 'R$ ' + amountDue.toFixed(2).replace('.', ','),
+        valor_pago: 'R$ ' + amountPaid.toFixed(2).replace('.', ','),
         valor_restante: 'R$ ' + remaining.toFixed(2).replace('.', ','),
         data_vencimento: formatDateBR(installment.due_date),
         dias_atraso: String(Math.max(0, Math.floor((Date.now() - new Date(installment.due_date + 'T12:00:00').getTime()) / 86400000))),
@@ -49,17 +52,15 @@ export default function WhatsAppSendButton({ installment }: Props) {
     const [open, setOpen] = useState(false);
     const [templates, setTemplates] = useState<MessageTemplate[]>([]);
     const [loading, setLoading] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        function handleClickOutside(e: MouseEvent) {
-            if (ref.current && !ref.current.contains(e.target as Node)) {
-                setOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setOpen(false);
+        };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [open]);
 
     const fetchTemplates = async () => {
         if (templates.length > 0) return;
@@ -99,8 +100,44 @@ export default function WhatsAppSendButton({ installment }: Props) {
 
     if (!phone) return null;
 
+    const modal = open ? createPortal(
+        <div
+            className="fixed inset-0 flex items-center justify-center p-4"
+            style={{ zIndex: 2147483647 }}
+        >
+            <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
+            <div className="relative z-10 w-full max-w-lg rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-elevated)] p-6 shadow-2xl animate-slide-up">
+                <div className="flex items-center justify-between mb-5">
+                    <h3 className="text-lg font-bold text-[var(--text-primary)] font-['Montserrat']">Enviar mensagem via WhatsApp</h3>
+                    <button onClick={() => setOpen(false)} className="text-[var(--text-faint)] hover:text-[var(--text-primary)] rounded-xl p-1.5 hover:bg-[var(--bg-nav-hover)] transition-all">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <div className="space-y-2">
+                    {loading ? (
+                        <div className="py-8 text-center text-sm text-[var(--text-muted)]">Carregando templates...</div>
+                    ) : templates.length === 0 ? (
+                        <div className="py-8 text-center text-sm text-[var(--text-muted)]">Nenhum template encontrado.</div>
+                    ) : (
+                        templates.map(template => (
+                            <button
+                                key={template.id}
+                                onClick={() => sendMessage(template.message)}
+                                className="w-full text-left rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-input)] p-4 transition-all duration-200 hover:border-emerald-500/40 hover:bg-emerald-500/5"
+                            >
+                                <p className="text-sm font-semibold text-[var(--text-primary)]">{template.name}</p>
+                                <p className="text-xs text-[var(--text-muted)] mt-1.5 line-clamp-3 whitespace-pre-wrap">{renderTemplate(template.message, installment)}</p>
+                            </button>
+                        ))
+                    )}
+                </div>
+            </div>
+        </div>,
+        document.body
+    ) : null;
+
     return (
-        <div className="relative" ref={ref}>
+        <>
             <button
                 onClick={handleOpen}
                 className="inline-flex items-center gap-1 rounded-lg bg-emerald-500 px-2.5 py-1.5 text-xs font-semibold text-white shadow-sm shadow-emerald-500/25 hover:bg-emerald-600 hover:shadow-emerald-500/40 transition-all duration-200"
@@ -111,32 +148,7 @@ export default function WhatsAppSendButton({ installment }: Props) {
                 </svg>
                 WhatsApp
             </button>
-
-            {open && (
-                <div className="absolute right-0 top-full z-50 mt-1 w-72 rounded-xl border border-gray-200 bg-white shadow-xl shadow-gray-200/50 overflow-hidden">
-                    <div className="px-3 py-2 border-b border-gray-100 bg-gray-50/80">
-                        <p className="text-xs font-semibold text-gray-600">Enviar mensagem via WhatsApp</p>
-                    </div>
-                    <div className="max-h-64 overflow-y-auto divide-y divide-gray-50">
-                        {loading ? (
-                            <div className="p-4 text-center text-xs text-gray-400">Carregando templates...</div>
-                        ) : templates.length === 0 ? (
-                            <div className="p-4 text-center text-xs text-gray-400">Nenhum template encontrado.</div>
-                        ) : (
-                            templates.map(template => (
-                                <button
-                                    key={template.id}
-                                    onClick={() => sendMessage(template.message)}
-                                    className="w-full text-left px-3 py-2.5 hover:bg-emerald-50 transition-colors group"
-                                >
-                                    <p className="text-xs font-semibold text-gray-900 group-hover:text-emerald-700">{template.name}</p>
-                                    <p className="text-[11px] text-gray-400 mt-0.5 line-clamp-2">{renderTemplate(template.message, installment)}</p>
-                                </button>
-                            ))
-                        )}
-                    </div>
-                </div>
-            )}
-        </div>
+            {modal}
+        </>
     );
 }

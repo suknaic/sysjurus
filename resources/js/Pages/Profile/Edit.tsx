@@ -11,9 +11,9 @@ export default function Edit({
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
         <AuthenticatedLayout
-            header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Perfil</h2>}
+            header={<h2 className="text-xl font-bold text-white tracking-tight">Perfil</h2>}
         >
-            <Head title="SysJuros - Perfil" />
+            <Head title="Receba+ - Perfil" />
 
             <div className="space-y-6 max-w-3xl">
                 <div className="card-premium">

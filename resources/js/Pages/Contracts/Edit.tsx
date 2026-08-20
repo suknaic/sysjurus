@@ -7,8 +7,8 @@ interface Props { contract: Contract; customers: Customer[]; }
 
 export default function ContractsEdit({ contract, customers }: Props) {
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Editar Contrato</h2>}>
-            <Head title="SysJuros - Editar Contrato" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Editar Contrato</h2>}>
+            <Head title="Receba+ - Editar Contrato" />
             <ContractForm contract={contract} customers={customers} />
         </AuthenticatedLayout>
     );

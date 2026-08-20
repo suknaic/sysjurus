@@ -60,8 +60,8 @@ export default function InstallmentsIndex({ installments, metrics, filters }: Pr
     };
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Vencimentos</h2>}>
-            <Head title="SysJuros - Vencimentos" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Vencimentos</h2>}>
+            <Head title="Receba+ - Vencimentos" />
             <FlashMessage />
 
             <PageHeader title="Vencimentos" />
@@ -79,25 +79,25 @@ export default function InstallmentsIndex({ installments, metrics, filters }: Pr
             </div>
 
             <div className="card-premium overflow-hidden">
+                <div className="px-5 py-3 bg-[var(--bg-table-header)] border-b border-[var(--border-subtle)] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <p className="text-sm text-[var(--text-muted)]">{installments.total} parcela(s)</p>
+                    <div className="flex flex-wrap gap-2">
+                        <button onClick={() => handleFilter('')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-300 ${!filters.status ? 'gradient-gold text-black shadow-md shadow-amber-500/25' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:bg-[var(--bg-input-focus)] border border-[var(--border-subtle)]'}`}>Todas</button>
+                        <button onClick={() => handleFilter('pending')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-300 ${filters.status === 'pending' ? 'bg-amber-500 text-black shadow-md shadow-amber-500/25' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:bg-[var(--bg-input-focus)] border border-[var(--border-subtle)]'}`}>Pendentes</button>
+                        <button onClick={() => handleFilter('overdue')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-300 ${filters.status === 'overdue' ? 'bg-red-500 text-white shadow-md shadow-red-500/25' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:bg-[var(--bg-input-focus)] border border-[var(--border-subtle)]'}`}>Atrasadas</button>
+                        <button onClick={() => handleFilter('paid')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-300 ${filters.status === 'paid' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25' : 'bg-[var(--bg-input)] text-[var(--text-muted)] hover:bg-[var(--bg-input-focus)] border border-[var(--border-subtle)]'}`}>Pagas</button>
+                    </div>
+                </div>
                 {installments.data.length === 0 ? (
                     <EmptyState title="Nenhuma parcela encontrada" description="Ajuste os filtros ou cadastre novos contratos." />
                 ) : (
                     <>
-                        <div className="px-5 py-3 bg-gray-50/80 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <p className="text-sm text-gray-500">{installments.total} parcela(s)</p>
-                            <div className="flex flex-wrap gap-2">
-                                <button onClick={() => handleFilter('')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-200 ${!filters.status ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-500/25' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Todas</button>
-                                <button onClick={() => handleFilter('pending')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-200 ${filters.status === 'pending' ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Pendentes</button>
-                                <button onClick={() => handleFilter('overdue')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-200 ${filters.status === 'overdue' ? 'bg-red-500 text-white shadow-md shadow-red-500/25' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Atrasadas</button>
-                                <button onClick={() => handleFilter('paid')} className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold transition-all duration-200 ${filters.status === 'paid' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>Pagas</button>
-                            </div>
-                        </div>
                         <div className="overflow-x-auto">
                             <table className="w-full table-premium">
                                 <thead>
                                     <tr>
-                                        <th>Contrato</th>
-                                        <th className="hidden sm:table-cell">Cliente</th>
+                                        <th>Cliente</th>
+                                        <th className="hidden sm:table-cell">Contrato</th>
                                         <th>Parcela</th>
                                         <th className="hidden md:table-cell">Vencimento</th>
                                         <th>Valor</th>
@@ -108,11 +108,14 @@ export default function InstallmentsIndex({ installments, metrics, filters }: Pr
                                 <tbody>
                                     {installments.data.map((inst) => (
                                         <tr key={inst.id}>
-                                            <td className="font-semibold text-indigo-600">{inst.contract?.code}</td>
-                                            <td className="hidden sm:table-cell text-gray-500">{inst.contract?.customer?.name}</td>
-                                            <td className="text-gray-500">{inst.installment_number}ª</td>
-                                            <td className="hidden md:table-cell text-gray-500">{formatDate(inst.due_date)}</td>
-                                            <td className="font-semibold text-gray-900">{formatCurrency(inst.amount_due)}</td>
+                                            <td className="font-semibold text-[#C9A84C]">
+                                                {inst.contract?.customer?.name}
+                                                <span className="sm:hidden text-xs text-[var(--text-faint)] block">{inst.contract?.code}</span>
+                                            </td>
+                                            <td className="hidden sm:table-cell font-semibold text-[#C9A84C]">{inst.contract?.code}</td>
+                                            <td className="text-[var(--text-muted)]">{inst.installment_number}ª</td>
+                                            <td className="hidden md:table-cell text-[var(--text-muted)]">{formatDate(inst.due_date)}</td>
+                                            <td className="font-semibold text-[var(--text-primary)]">{formatCurrency(inst.amount_due)}</td>
                                             <td><StatusBadge status={inst.status} /></td>
                                             <td className="text-right">
                                                 <div className="flex items-center justify-end gap-2">
@@ -139,37 +142,37 @@ export default function InstallmentsIndex({ installments, metrics, filters }: Pr
             <Modal show={showPaymentModal} onClose={() => setShowPaymentModal(false)} title="Registrar Pagamento">
                 <div className="space-y-4">
                     {selectedInstallment && (
-                        <div className="rounded-xl bg-gradient-to-r from-gray-50 to-indigo-50/30 p-4 border border-gray-100">
+                        <div className="rounded-xl bg-[var(--bg-input)] p-4 border border-[var(--border-subtle)]">
                             <div className="grid grid-cols-2 gap-3 text-sm">
                                 <div>
-                                    <p className="text-gray-500 text-xs font-semibold">Contrato</p>
-                                    <p className="font-bold text-gray-900">{selectedInstallment.contract?.code}</p>
+                                    <p className="text-[var(--text-muted)] text-xs font-semibold">Contrato</p>
+                                    <p className="font-bold text-[var(--text-primary)]">{selectedInstallment.contract?.code}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-xs font-semibold">Parcela</p>
-                                    <p className="font-bold text-gray-900">{selectedInstallment.installment_number}ª</p>
+                                    <p className="text-[var(--text-muted)] text-xs font-semibold">Parcela</p>
+                                    <p className="font-bold text-[var(--text-primary)]">{selectedInstallment.installment_number}ª</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-xs font-semibold">Valor Devido</p>
-                                    <p className="font-bold text-gray-900">{formatCurrency(selectedInstallment.amount_due)}</p>
+                                    <p className="text-[var(--text-muted)] text-xs font-semibold">Valor Devido</p>
+                                    <p className="font-bold text-[var(--text-primary)]">{formatCurrency(selectedInstallment.amount_due)}</p>
                                 </div>
                                 <div>
-                                    <p className="text-gray-500 text-xs font-semibold">Restante</p>
-                                    <p className="font-bold text-indigo-600">{formatCurrency(selectedInstallment.amount_due - selectedInstallment.amount_paid)}</p>
+                                    <p className="text-[var(--text-muted)] text-xs font-semibold">Restante</p>
+                                    <p className="font-bold text-[#C9A84C]">{formatCurrency(selectedInstallment.amount_due - selectedInstallment.amount_paid)}</p>
                                 </div>
                             </div>
                         </div>
                     )}
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Valor (R$)</label>
+                        <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Valor (R$)</label>
                         <input type="number" step="0.01" value={paymentData.amount} onChange={(e) => setPaymentData({ ...paymentData, amount: e.target.value })} className="input-premium" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Data</label>
+                        <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Data</label>
                         <input type="date" value={paymentData.payment_date} onChange={(e) => setPaymentData({ ...paymentData, payment_date: e.target.value })} className="input-premium" />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">Forma de Pagamento</label>
+                        <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-1.5">Forma de Pagamento</label>
                         <select value={paymentData.payment_method} onChange={(e) => setPaymentData({ ...paymentData, payment_method: e.target.value })} className="select-premium">
                             <option value="pix">PIX</option>
                             <option value="boleto">Boleto</option>
@@ -178,7 +181,7 @@ export default function InstallmentsIndex({ installments, metrics, filters }: Pr
                             <option value="card">Cartao</option>
                         </select>
                     </div>
-                    <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                    <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-subtle)]">
                         <button onClick={() => setShowPaymentModal(false)} className="btn-secondary">Cancelar</button>
                         <button onClick={submitPayment} className="btn-success">Confirmar Pagamento</button>
                     </div>

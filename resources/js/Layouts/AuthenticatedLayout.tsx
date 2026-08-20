@@ -1,6 +1,7 @@
 import { useState, PropsWithChildren, ReactNode } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
+import { useTheme } from '@/Context/ThemeContext';
 
 interface Props {
     header?: ReactNode;
@@ -33,25 +34,45 @@ const navigation = [
     )},
 ];
 
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+
+    return (
+        <button
+            onClick={toggleTheme}
+            className="flex items-center justify-center rounded-xl p-2 transition-all duration-300 hover:bg-[var(--bg-nav-hover)] text-[var(--text-muted)] hover:text-[var(--text-secondary)]"
+            title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+        >
+            {theme === 'dark' ? (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                </svg>
+            ) : (
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+                </svg>
+            )}
+        </button>
+    );
+}
+
 export default function AuthenticatedLayout({ children, header }: PropsWithChildren<Props>) {
     const { auth } = usePage<PageProps>().props;
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const currentUrl = window.location.pathname;
 
     return (
-        <div className="min-h-screen bg-gray-50 gradient-mesh">
+        <div className="min-h-screen gradient-mesh">
             {/* Mobile sidebar */}
             <div className={`fixed inset-0 z-50 lg:hidden transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
                 <div className={`fixed inset-y-0 left-0 flex w-72 flex-col glass-sidebar transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                    <div className="flex h-16 items-center justify-between px-6 border-b border-white/10">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
-                                <span className="text-xs font-bold text-white">$</span>
-                            </div>
-                            <span className="text-lg font-bold text-white tracking-tight">SysJuros</span>
-                        </div>
-                        <button onClick={() => setSidebarOpen(false)} className="text-gray-400 hover:text-white transition-colors rounded-lg p-1 hover:bg-white/10">
+                    <div className="flex h-16 items-center justify-between px-6 border-b border-[var(--sidebar-border)]">
+                        <Link href="/dashboard" className="flex items-center gap-3">
+                            <img src="/logo-receba.png" alt="Receba+" className="h-9 w-9 rounded-xl object-contain" />
+                            <span className="text-lg font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Receba+</span>
+                        </Link>
+                        <button onClick={() => setSidebarOpen(false)} className="text-[var(--text-faint)] hover:text-[var(--text-primary)] transition-colors rounded-lg p-1.5 hover:bg-[var(--bg-nav-hover)]">
                             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                         </button>
                     </div>
@@ -67,14 +88,14 @@ export default function AuthenticatedLayout({ children, header }: PropsWithChild
                             </Link>
                         ))}
                     </nav>
-                    <div className="border-t border-white/10 p-4">
+                    <div className="border-t border-[var(--sidebar-border)] p-4">
                         <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-indigo-500/20">
+                            <div className="h-9 w-9 rounded-xl gradient-gold flex items-center justify-center text-[#0A0A0A] text-sm font-bold shadow-lg shadow-amber-500/20">
                                 {auth.user.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-white truncate">{auth.user.name}</p>
-                                <p className="text-xs text-gray-400 truncate">{auth.user.email}</p>
+                                <p className="text-sm font-semibold text-[var(--text-primary)] truncate">{auth.user.name}</p>
+                                <p className="text-xs text-[var(--text-faint)] truncate">{auth.user.email}</p>
                             </div>
                         </div>
                     </div>
@@ -84,16 +105,14 @@ export default function AuthenticatedLayout({ children, header }: PropsWithChild
             {/* Desktop sidebar */}
             <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col">
                 <div className="flex min-h-0 flex-1 flex-col glass-sidebar">
-                    <div className="flex h-16 items-center px-6 border-b border-white/10">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary shadow-lg shadow-indigo-500/30">
-                                <span className="text-sm font-bold text-white">$</span>
-                            </div>
+                    <div className="flex h-16 items-center px-6 border-b border-[var(--sidebar-border)]">
+                        <Link href="/dashboard" className="flex items-center gap-3">
+                            <img src="/logo-receba.png" alt="Receba+" className="h-9 w-9 rounded-xl object-contain gold-glow" />
                             <div>
-                                <span className="text-lg font-bold text-white tracking-tight">SysJuros</span>
-                                <p className="text-[10px] text-gray-400 -mt-0.5">Gestao Financeira</p>
+                                <span className="text-lg font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Receba+</span>
+                                <p className="text-[10px] text-[var(--text-faint)] -mt-0.5 tracking-wider uppercase">Gestao Financeira</p>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
                         {navigation.map((item) => (
@@ -107,16 +126,16 @@ export default function AuthenticatedLayout({ children, header }: PropsWithChild
                             </Link>
                         ))}
                     </nav>
-                    <div className="border-t border-white/10 p-4">
-                        <Link href="/profile" className="flex items-center gap-3 rounded-xl p-2 transition-all duration-200 hover:bg-white/5 group">
-                            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-400 to-violet-500 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-shadow">
+                    <div className="border-t border-[var(--sidebar-border)] p-4">
+                        <Link href="/profile" className="flex items-center gap-3 rounded-xl p-2 transition-all duration-300 hover:bg-[var(--bg-nav-hover)] group">
+                            <div className="h-9 w-9 rounded-xl gradient-gold flex items-center justify-center text-[#0A0A0A] text-sm font-bold shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/30 transition-shadow">
                                 {auth.user.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold text-white truncate group-hover:text-indigo-200 transition-colors">{auth.user.name}</p>
-                                <p className="text-xs text-gray-400 truncate">{auth.user.email}</p>
+                                <p className="text-sm font-semibold text-[var(--text-primary)] truncate group-hover:text-[#D4AF37] transition-colors">{auth.user.name}</p>
+                                <p className="text-xs text-[var(--text-faint)] truncate">{auth.user.email}</p>
                             </div>
-                            <svg className="h-4 w-4 text-gray-500 group-hover:text-gray-300 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                            <svg className="h-4 w-4 text-[var(--text-faint)] group-hover:text-[var(--text-muted)] transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
                         </Link>
                     </div>
                 </div>
@@ -124,15 +143,26 @@ export default function AuthenticatedLayout({ children, header }: PropsWithChild
 
             {/* Main content */}
             <div className="lg:pl-72 flex flex-col min-h-screen">
-                <div className="sticky top-0 z-30 flex h-16 items-center gap-x-4 border-b border-gray-200/60 bg-white/80 backdrop-blur-xl px-4 sm:gap-x-6 sm:px-6 lg:px-8">
-                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl p-2 transition-colors">
+                {/* Header */}
+                <div className="sticky top-0 z-30 flex h-16 items-center gap-x-4 border-b border-[var(--sidebar-border)] bg-[var(--header-bg)] backdrop-blur-xl px-4 sm:gap-x-6 sm:px-6 lg:px-8">
+                    <button onClick={() => setSidebarOpen(true)} className="lg:hidden text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-nav-hover)] rounded-xl p-2 transition-colors">
                         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                     </button>
                     {header && <div className="flex-1">{header}</div>}
-                    <div className="flex items-center gap-x-3">
-                        <Link href="/profile" className="hidden sm:inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-gray-100 hover:text-gray-900">
+                    <div className="flex items-center gap-x-2">
+                        <ThemeToggle />
+                        <button
+                            onClick={() => router.post(route('logout'))}
+                            className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[var(--text-muted)] transition-all duration-300 hover:bg-red-500/10 hover:text-red-400"
+                        >
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                            </svg>
+                            <span className="hidden sm:inline">Sair</span>
+                        </button>
+                        <Link href="/profile" className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-[var(--text-muted)] transition-all duration-300 hover:bg-[var(--bg-nav-hover)] hover:text-[var(--text-primary)]">
                             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                            Perfil
+                            <span className="hidden sm:inline">Perfil</span>
                         </Link>
                     </div>
                 </div>

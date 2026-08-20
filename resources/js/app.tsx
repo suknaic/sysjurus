@@ -4,8 +4,9 @@ import '../css/app.css';
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
+import { ThemeProvider } from './Context/ThemeContext';
 
-const appName = import.meta.env.VITE_APP_NAME || 'SysJuros';
+const appName = import.meta.env.VITE_APP_NAME || 'Receba+';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -13,9 +14,13 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<App {...props} />);
+        root.render(
+            <ThemeProvider>
+                <App {...props} />
+            </ThemeProvider>
+        );
     },
     progress: {
-        color: '#4F46E5',
+        color: '#C9A84C',
     },
 });

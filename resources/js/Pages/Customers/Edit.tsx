@@ -7,8 +7,8 @@ interface Props { customer: Customer; }
 
 export default function CustomersEdit({ customer }: Props) {
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-gray-900 tracking-tight">Editar Cliente</h2>}>
-            <Head title="SysJuros - Editar Cliente" />
+        <AuthenticatedLayout header={<h2 className="text-xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Editar Cliente</h2>}>
+            <Head title="Receba+ - Editar Cliente" />
             <CustomerForm customer={customer} />
         </AuthenticatedLayout>
     );

@@ -10,26 +10,24 @@ export default function VerifyEmail({ status }: { status?: string }) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 gradient-mesh px-4">
-            <Head title="SysJuros - Verificar Email" />
+        <div className="min-h-screen flex items-center justify-center gradient-mesh px-4">
+            <Head title="Receba+ - Verificar Email" />
             <div className="w-full max-w-md">
                 <div className="text-center mb-8">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary shadow-xl shadow-indigo-500/30 mb-4">
-                        <span className="text-xl font-bold text-white">$</span>
-                    </div>
-                    <h1 className="text-2xl font-bold text-gray-900 tracking-tight">SysJuros</h1>
-                    <p className="text-sm text-gray-500 mt-1">Gestao Financeira</p>
+                    <img src="/icon-receba.png" alt="Receba+" className="mx-auto h-16 w-16 rounded-2xl object-contain gold-glow mb-4" />
+                    <h1 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight font-['Montserrat']">Receba+</h1>
+                    <p className="text-sm text-[var(--text-muted)] mt-1.5 tracking-wider uppercase text-[11px]">Gestao Financeira</p>
                 </div>
 
                 <div className="card-premium p-8">
                     <div className="mb-6">
-                        <p className="text-sm text-gray-500">
-                            Obrigado por se cadastrar! Antes de comecar, voce poderia verificar seu endereco de email clicando no link que acabamos de enviar? Se nao recebeu o email, com prazer enviaremos outro.
+                        <p className="text-sm text-[var(--text-muted)]">
+                            Obrigado por se cadastrar! Antes de comecar, voce poderia verificar seu endereco de email clicando no link que acabamos de enviar?
                         </p>
                     </div>
 
                     {status === 'verification-link-sent' && (
-                        <div className="mb-4 rounded-xl bg-emerald-50 p-3 text-sm font-medium text-emerald-700 border border-emerald-200">
+                        <div className="mb-4 rounded-xl bg-emerald-500/10 p-3 text-sm font-medium text-emerald-400 border border-emerald-500/20">
                             Um novo link de verificacao foi enviado para o email que voce forneceu durante o cadastro.
                         </div>
                     )}
@@ -40,12 +38,12 @@ export default function VerifyEmail({ status }: { status?: string }) {
                         </button>
                     </form>
 
-                    <div className="mt-6 pt-6 border-t border-gray-100">
+                    <div className="mt-6 pt-6 border-t border-[var(--border-subtle)]">
                         <Link
                             href={route('logout')}
                             method="post"
                             as="button"
-                            className="text-sm font-semibold text-gray-500 hover:text-gray-700 transition-colors"
+                            className="text-sm font-semibold text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                         >
                             Sair
                         </Link>
