@@ -13,7 +13,7 @@ interface Props {
 const colorStyles = {
     indigo: {
         icon: 'gradient-gold shadow-amber-500/20',
-        value: 'text-white',
+        value: 'text-[var(--text-primary)]',
         bar: 'from-[#C9A84C] to-[#D4AF37]',
     },
     green: {

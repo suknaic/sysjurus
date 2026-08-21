@@ -30,10 +30,10 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header className="mb-6">
-                <h2 className="text-lg font-bold text-white">
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">
                     Informacoes do Perfil
                 </h2>
-                <p className="mt-1 text-sm text-[#8B95A8]">
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
                     Atualize as informacoes do perfil da sua conta e endereco de email.
                 </p>
             </header>
@@ -69,7 +69,7 @@ export default function UpdateProfileInformation({
 
                 {mustVerifyEmail && user.email_verified_at === null && (
                     <div>
-                        <p className="mt-2 text-sm text-[#8B95A8]">
+                        <p className="mt-2 text-sm text-[var(--text-muted)]">
                             Seu endereco de email nao esta verificado.
                             <Link
                                 href={route('verification.send')}

@@ -50,10 +50,10 @@ export default function UpdatePasswordForm({
     return (
         <section className={className}>
             <header className="mb-6">
-                <h2 className="text-lg font-bold text-white">
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">
                     Atualizar Senha
                 </h2>
-                <p className="mt-1 text-sm text-[#8B95A8]">
+                <p className="mt-1 text-sm text-[var(--text-muted)]">
                     Certifique-se de que sua conta esteja usando uma senha longa e aleatoria para manter a seguranca.
                 </p>
             </header>
